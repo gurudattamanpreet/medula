@@ -5,9 +5,301 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zenturatech - AI Agent Solutions for Modern Business</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="chatbot-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Inline Chatbot Styles -->
+    <style>
+        /* Chatbot Styles */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+        }
+
+        .chatbot-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .chatbot-button i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .chatbot-notification {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 71, 87, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+        }
+
+        .chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .chatbot-container.active {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chatbot-header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chatbot-status-indicator {
+            width: 10px;
+            height: 10px;
+            background: #4caf50;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chatbot-header h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chatbot-status {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .chatbot-message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bot-message .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .user-message {
+            flex-direction: row-reverse;
+        }
+
+        .user-message .message-avatar {
+            background: #e3e4e8;
+            color: #6b7280;
+        }
+
+        .message-content {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 75%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message-content p {
+            margin: 0 0 8px 0;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #6b7280;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        .chatbot-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        #chatbot-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #chatbot-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 25px;
+            outline: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        #chatbot-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .chatbot-send {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-send:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .chatbot-container {
+                width: calc(100vw - 20px);
+                height: calc(100vh - 100px);
+                right: 10px;
+                bottom: 80px;
+            }
+            
+            .chatbot-button {
+                width: 50px;
+                height: 50px;
+                right: 20px;
+                bottom: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -451,11 +743,161 @@
     <!-- Original Script -->
     <script src="script.js"></script>
     
-    <!-- Chatbot Script - Choose one based on your setup -->
-    <!-- Option 1: For production with backend API -->
-    <script src="chatbot.js"></script>
-    
-    <!-- Option 2: For testing without backend (Replace with your API key) -->
-    <!-- <script src="chatbot-simple.js"></script> -->
+    <!-- Inline Chatbot JavaScript -->
+    <script>
+        // Chatbot functionality
+        let chatbotOpen = false;
+        let isTyping = false;
+
+        // Toggle chatbot visibility
+        function toggleChatbot() {
+            const container = document.getElementById('chatbot-container');
+            const notification = document.querySelector('.chatbot-notification');
+            
+            chatbotOpen = !chatbotOpen;
+            
+            if (chatbotOpen) {
+                container.classList.add('active');
+                if (notification) notification.style.display = 'none';
+                setTimeout(() => {
+                    document.getElementById('chatbot-input').focus();
+                }, 100);
+            } else {
+                container.classList.remove('active');
+            }
+        }
+
+        // Send message
+        function sendMessage(event) {
+            event.preventDefault();
+            
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            
+            if (!message || isTyping) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            
+            // Clear input
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            isTyping = true;
+            
+            // Simulate bot response (replace with actual API call)
+            setTimeout(() => {
+                removeTypingIndicator();
+                const response = getBotResponse(message);
+                addMessage(response, 'bot');
+                isTyping = false;
+            }, 1500);
+        }
+
+        // Add message to chat
+        function addMessage(message, type) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chatbot-message ${type}-message`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = type === 'bot' 
+                ? '<i class="fas fa-robot"></i>' 
+                : '<i class="fas fa-user"></i>';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            if (type === 'bot' && message.includes('\n')) {
+                const paragraphs = message.split('\n').filter(p => p.trim());
+                paragraphs.forEach(para => {
+                    const p = document.createElement('p');
+                    p.textContent = para;
+                    content.appendChild(p);
+                });
+            } else {
+                const p = document.createElement('p');
+                p.textContent = message;
+                content.appendChild(p);
+            }
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            messagesContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chatbot-message bot-message typing-message';
+            typingDiv.id = 'typing-indicator';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = '<i class="fas fa-robot"></i>';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content typing-indicator';
+            content.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            
+            typingDiv.appendChild(avatar);
+            typingDiv.appendChild(content);
+            messagesContainer.appendChild(typingDiv);
+            
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Get bot response (simple responses for demo)
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                return "Hello! I'm here to help you explore Zenturatech's AI Agent solutions. What would you like to know about our services?";
+            } else if (lowerMessage.includes('service')) {
+                return "We offer four main AI agent services:\n1. Custom AI Agents - Tailored to your business needs\n2. Conversational AI - Intelligent chatbots\n3. Process Automation - Streamline workflows\n4. Intelligent Analytics - Data insights\nWhich one interests you?";
+            } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+                return "Our pricing is customized based on your specific requirements. I'd recommend scheduling a consultation for a personalized quote. Would you like me to help you schedule one?";
+            } else if (lowerMessage.includes('contact')) {
+                return "You can reach us at:\nEmail: info@zenturatech.com\nPhone: +91 89628 10180\nOr fill out the contact form on our website.";
+            } else if (lowerMessage.includes('demo')) {
+                return "I'd be happy to arrange a demo! Please use the contact form below or email us at info@zenturatech.com to schedule a personalized demonstration of our AI agents.";
+            } else {
+                return "That's a great question! For detailed information about " + message + ", I recommend contacting our team directly. They can provide specific insights tailored to your needs. Would you like to know about our services or schedule a consultation?";
+            }
+        }
+
+        // Initialize chatbot
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                const notification = document.querySelector('.chatbot-notification');
+                if (notification && !chatbotOpen) {
+                    notification.style.display = 'none';
+                }
+            }, 5000);
+            
+            console.log('Zenturatech AI Chatbot initialized');
+        });
+    </script>
 </body>
 </html>
