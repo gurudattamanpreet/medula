@@ -873,6 +873,10 @@
             
             if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
                 return "Hello! I'm here to help you explore Zenturatech's AI Agent solutions. What would you like to know about our services?";
+            } else if (lowerMessage.includes('founder') || lowerMessage.includes('ceo') || lowerMessage.includes('who created') || lowerMessage.includes('who started') || lowerMessage.includes('who owns')) {
+                return "Manpreet S Gurudatta is the Founder & CEO of Zenturatech. Under his leadership, we're pioneering the development of intelligent AI agents that transform businesses across industries.";
+            } else if (lowerMessage.includes('manpreet')) {
+                return "Manpreet S Gurudatta is the Founder & CEO of Zenturatech. He leads our mission to make advanced AI accessible and practical for organizations of all sizes through innovative AI agent solutions.";
             } else if (lowerMessage.includes('service')) {
                 return "We offer four main AI agent services:\n1. Custom AI Agents - Tailored to your business needs\n2. Conversational AI - Intelligent chatbots\n3. Process Automation - Streamline workflows\n4. Intelligent Analytics - Data insights\nWhich one interests you?";
             } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
