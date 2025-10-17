@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zenturatech - AI Agent Solutions for Modern Business</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chatbot-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -398,6 +399,63 @@
         </div>
     </footer>
 
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget" class="chatbot-widget">
+        <div class="chatbot-button" onclick="toggleChatbot()">
+            <i class="fas fa-robot"></i>
+            <span class="chatbot-notification">1</span>
+        </div>
+        
+        <div id="chatbot-container" class="chatbot-container">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <div class="chatbot-status-indicator"></div>
+                    <div>
+                        <h4>ZenturaTech AI Assistant</h4>
+                        <span class="chatbot-status">AI Agent Online</span>
+                    </div>
+                </div>
+                <button class="chatbot-close" onclick="toggleChatbot()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="chatbot-messages" class="chatbot-messages">
+                <div class="chatbot-message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>👋 Hello! I'm Zentura AI Assistant. I can help you learn about our AI Agent solutions, discuss your automation needs, or answer questions about our services.</p>
+                        <p>How can I assist you today?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input-container">
+                <form id="chatbot-form" onsubmit="sendMessage(event)">
+                    <input 
+                        type="text" 
+                        id="chatbot-input" 
+                        placeholder="Type your message..."
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="chatbot-send">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Original Script -->
     <script src="script.js"></script>
+    
+    <!-- Chatbot Script - Choose one based on your setup -->
+    <!-- Option 1: For production with backend API -->
+    <script src="chatbot.js"></script>
+    
+    <!-- Option 2: For testing without backend (Replace with your API key) -->
+    <!-- <script src="chatbot-simple.js"></script> -->
 </body>
 </html>
